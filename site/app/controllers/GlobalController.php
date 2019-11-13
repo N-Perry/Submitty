@@ -67,6 +67,14 @@ class GlobalController extends AbstractController {
                 ]);
             }
 
+            $sidebar_buttons[] = new Button($this->core, [
+                "href" => $this->core->buildUrl(['homework', 'library']),
+                "title" => "Homework Library",
+                "class" => "nav-row",
+                "id" => "nav-sidebar-homework-library",
+                "icon" => "fa-book-open"
+            ]);
+
             if ($unread_notifications_count !== null) {
                 $sidebar_buttons[] = new Button($this->core, [
                     "href" => $this->core->buildCourseUrl(['notifications']),

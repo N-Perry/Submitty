@@ -26,6 +26,18 @@ class HomePageController extends AbstractController {
     public function __construct(Core $core) {
         parent::__construct($core);
     }
+	
+    /**
+     * Display the HomePageView to the student.
+     *
+     * @Route("/homework/library")
+     * @return Response
+     */
+    public function showLibrary() {
+		return Response::WebOnlyResponse(
+			new WebResponse('Homework', 'library')
+		);
+    }
 
     /**
      * @Route("/current_user/change_password", methods={"POST"})
