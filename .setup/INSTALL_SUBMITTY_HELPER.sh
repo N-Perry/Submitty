@@ -363,6 +363,15 @@ if [ "${WORKER}" == 0 ]; then
     find ${SUBMITTY_INSTALL_DIR}/more_autograding_examples -type d -exec chmod 555 {} \;
     find ${SUBMITTY_INSTALL_DIR}/more_autograding_examples -type f -exec chmod 444 {} \;
 fi
+
+
+########################################################################################################################
+########################################################################################################################
+# Create default homework library folder
+mkdir -p ${SUBMITTY_INSTALL_DIR}/library
+chown submitty_php:submitty_php ${SUBMITTY_INSTALL_DIR}/library
+chmod g+rwx ${SUBMITTY_INSTALL_DIR}/library
+
 ########################################################################################################################
 ########################################################################################################################
 # BUILD JUNIT TEST RUNNER (.java file)

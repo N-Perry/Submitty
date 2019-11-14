@@ -1,0 +1,16 @@
+<form class="form-signin" action="{{ git_submit_url }}" method="post">
+    <div class="option row">
+        <div class="option-desc col-md-6">
+            <label for="instructions_url">
+                <div class="option-title">Git URL</div>
+                <div class="option-alt">What is the url to the Git repo?</div>
+            </label>
+        </div>
+        <div class="option-input col-md-6">
+            <input type='text' name='git_url' id='git_url' class="auto_save" placeholder="https://example.com/exampleRepo.git" />
+        </div>
+    </div>
+    <div class="row">
+        <input class="btn btn-primary" type="submit" value="Submit" />
+    </div>
+</form>

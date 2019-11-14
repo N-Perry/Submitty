@@ -23,6 +23,20 @@ use app\exceptions\DatabaseException;
  * @AccessControl(role="INSTRUCTOR")
  */
 class UsersController extends AbstractController {
+
+    /**
+     * Display the HomePageView to the student.
+     *
+     * @Route("/{_semester}/{_course}/homework/library", methods={"GET"})
+     * @return Response
+     */
+    public function showLibrary() {
+        $this->core->getOutput()->addBreadcrumb("Homework Library");
+        return Response::WebOnlyResponse(
+            new WebResponse('Homework', 'library')
+        );
+    }
+    
     /**
      * @Route("/{_semester}/{_course}/users", methods={"GET"})
      * @Route("/api/{_semester}/{_course}/users", methods={"GET"})
