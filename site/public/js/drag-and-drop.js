@@ -1051,3 +1051,68 @@ function handleUploadCourseMaterials(csrf_token, expand_zip, cmPath, requested_p
         }
     });
 }
+
+function handleUploadGradeablesZip() {
+  var submit_url = buildCourseUrl(['homework/library', 'zip', 'upload']);
+  var return_url = buildCourseUrl(['homework/library']);
+  var formData = new FormData();
+
+  var filesToBeAdded = false;
+  // Files selected
+  for (var i = 0; i < file_array.length; i++) {
+    for (var j = 0; j < file_array[i].length; j++) {
+      if (file_array[i][j].name.indexOf("'") != -1 ||
+        file_array[i][j].name.indexOf("\"") != -1) {
+        alert("ERROR! You may not use quotes in your filename: " + file_array[i][j].name);
+        return;
+      }
+      else if (file_array[i][j].name.indexOf("\\") != -1 ||
+        file_array[i][j].name.indexOf("/") != -1) {
+        alert("ERROR! You may not use a slash in your filename: " + file_array[i][j].name);
+        return;
+      }
+      else if (file_array[i][j].name.indexOf("<") != -1 ||
+        file_array[i][j].name.indexOf(">") != -1) {
+        alert("ERROR! You may not use angle brackets in your filename: " + file_array[i][j].name);
+        return;
+      }
+      else if (getFileExtension(file_array[i][j].name).toLowerCase() != "zip") {
+        alert("ERROR! Only zip files are supported: " + file_array[i][j].name);
+        return;
+      }
+      formData.append('files' + (i + 1) + '[]', file_array[i][j], file_array[i][j].name);
+      filesToBeAdded = true;
+    }
+  }
+  if (filesToBeAdded == false){
+    return;
+  }
+
+  $.ajax({
+    url: submit_url,
+    data: formData,
+    processData: false,
+    contentType: false,
+    type: 'POST',
+    success: function(data) {
+      try {
+        var jsondata = JSON.parse(data);
+
+        if (jsondata['status'] === 'success') {
+          window.location.href = return_url;
+        }
+        else {
+          alert(jsondata['message']);
+        }
+      }
+      catch (e) {
+        alert("Error parsing response from server. Please copy the contents of your Javascript Console and " +
+          "send it to an administrator, as well as what you were doing and what files you were uploading. - [handleUploadGradeablesZip]");
+        console.log(data);
+      }
+    },
+    error: function(data) {
+      window.location.href = buildCourseUrl(['homework/library', 'manage']);
+    }
+  });
+}

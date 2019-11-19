@@ -1,0 +1,45 @@
+<div class="form-title">
+    <h1>Upload Gradeables</h1>
+</div>
+<div class="flex-col flex-col-space">
+    <p>
+        Upload gradeables by zipping up a single or multiple gradeable folders.
+    </p>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <div id="upload-boxes">
+        {# upload1 and input_file1 required for drag-and-drop.js #}
+        <div id="upload1" class="file-input">
+            <label class="label" for="input-file">"Drag your file(s) here or click to open file browser"</label>
+            <input type="file" name="files" id="input_file1" onchange="addFilesFromInput(1,false)" multiple />
+        </div>
+    </div>
+    <p>
+        Total files cannot exceed 10MB or 10240KB.
+    </p>
+</div>
+
+<div class="form-buttons">
+    <div class="form-button-container">
+        <input class="btn btn-primary" id="submit" type="submit" value="Submit" />
+    </div>
+</div>
+<script type="text/javascript">
+    function makeSubmission() {
+        handleUploadGradeablesZip();
+    }
+    $(function() {
+        $("#submit").click(function(e){ // Submit button
+            makeSubmission();
+            e.stopPropagation();
+        });
+    });
+</script>
+<script type="text/javascript">
+    createArray(1);
+    var dropzone = document.getElementById("upload1");
+    dropzone.addEventListener("click", clicked_on_box, false);
+    dropzone.addEventListener("dragenter", draghandle, false);
+    dropzone.addEventListener("dragover", draghandle, false);
+    dropzone.addEventListener("dragleave", draghandle, false);
+    dropzone.addEventListener("drop", dropWithMultipleZips, false);
+</script>

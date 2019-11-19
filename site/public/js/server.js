@@ -1,9 +1,35 @@
+const getLorem = (index) => {
+    const lorem = [
+        "Lorem ipsum dolor sit amet happy, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ac placerat vestibulum lectus mauris ultrices eros in. Amet commodo nulla facilisi nullam vehicula.",
+        "Lorem ipsum dolor sit amet wonder, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Iaculis at erat pellentesque adipiscing commodo. Condimentum vitae sapien pellentesque habitant morbi tristique senectus et.",
+        "Lorem ipsum dolor sit amet flip table, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Egestas maecenas pharetra convallis posuere morbi leo urna molestie at. Tellus cras adipiscing enim eu turpis.",
+    ];
+    return lorem[index];
+}
+
+const displayHomeworkLibraryDetails = e => {
+    // not working because PHP has a weird bug that doesn't allow datasets to store paragraph strings correctly
+    // console.log(e)
+    // console.log("click", e.target.innerText)
+    // console.log("value", e.target.dataset.value)
+    // const content = e.target.dataset.value;
+
+    // so we will access the lorem via server instead
+    const index = e.target.dataset.index;
+    console.log("index", index);
+    const content = getLorem(index);
+    $('.homework-library-panel-content').text(content);
+}
+
 var csrfToken = undefined;
 
 window.addEventListener("load", function() {
   for (const elem in document.body.dataset) {
     window[elem] = document.body.dataset[elem];
   }
+
+  Array.from(document.getElementsByClassName('homework-library-panel-card'))
+    .forEach(ele => ele.addEventListener('click', displayHomeworkLibraryDetails))
 });
 
 window.addEventListener("resize", checkSidebarCollapse);

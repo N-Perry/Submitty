@@ -1,6 +1,58 @@
 @import url("reset.css");
 @import url("google/inconsolata.css");
 
+.homework-library-search {
+    margin-right: 16px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.homework-library-results {
+    display: flex;
+}
+
+.homework-library-preview {
+    flex: 3;
+    background-color: #eff1f3;
+    margin-right: 16px;
+}
+
+.homework-library-detail {
+    flex: 5;
+    background-color: #eff1f3;
+    margin-right: 16px;
+}
+
+.homework-library-panel-header {
+    padding: 8px;
+}
+
+.homework-library-panel-card {
+    padding: 8px;
+    background-color: #fff;
+    box-shadow: 0 1px 1px rgba(27,31,35,.1);
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.homework-library-panel-container {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 8px;
+}
+
+.homework-library-panel-content {
+    padding: 8px;
+    background-color: #fff;
+    box-shadow: 0 1px 1px rgba(27,31,35,.1);
+}
+
+.homework-library-border {
+    border-width: 1px;
+    border-radius: 6px;
+    border: 1px solid #e1e4e8;
+}
+
 :root {
     --viewed_content: #e8f0f7;
 }

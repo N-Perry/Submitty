@@ -26,6 +26,34 @@ class HomePageController extends AbstractController {
     public function __construct(Core $core) {
         parent::__construct($core);
     }
+	
+    /**
+     * Display the HomePageView to the student.
+     *
+     * @Route("/homework/library")
+     * @return Response
+     */
+    public function showLibrary() {
+        $this->core->getOutput()->addBreadcrumb("Homework Library");
+		return Response::WebOnlyResponse(
+			new WebResponse('Homework', 'library')
+		);
+    }
+
+    /**
+     * Display the LibraryManagerView to the instructor/admin.
+     *
+     * @Route("/homework/library/manage", methods={"GET"})
+     * @return Response
+     */
+    public function showLibraryManager() {
+        $this->core->getOutput()->addBreadcrumb("Manage");
+        $this->core->getOutput()->addInternalCss('admin-gradeable.css');
+        $text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ";
+        return Response::WebOnlyResponse(
+            new WebResponse(['admin','LibraryManager'], 'showLibraryManager', $text)
+        );
+    }
 
     /**
      * @Route("/current_user/change_password", methods={"POST"})

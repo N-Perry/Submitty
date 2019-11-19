@@ -400,6 +400,7 @@ SUBMITTY_JSON = os.path.join(CONFIG_INSTALL_DIR, 'submitty.json')
 SUBMITTY_USERS_JSON = os.path.join(CONFIG_INSTALL_DIR, 'submitty_users.json')
 WORKERS_JSON = os.path.join(CONFIG_INSTALL_DIR, 'autograding_workers.json')
 SECRETS_PHP_JSON = os.path.join(CONFIG_INSTALL_DIR, 'secrets_submitty_php.json')
+HOMEWORK_LIBRARY_JSON = os.path.join(CONFIG_INSTALL_DIR, 'homework_library.json')
 
 #If the workers.json exists, rescue it from the destruction of config (move it to a temp directory).
 tmp_autograding_workers_file = ""
@@ -461,6 +462,17 @@ if not args.worker:
         json.dump(config, json_file, indent=2)
     shutil.chown(DATABASE_JSON, 'root', DAEMONPHP_GROUP)
     os.chmod(DATABASE_JSON, 0o440)
+
+##############################################################################
+# Write homework library json
+
+config = OrderedDict()
+config['homework_library_enabled'] = False
+config['homework_library_location'] = os.path.join(SUBMITTY_INSTALL_DIR, 'library')
+with open(HOMEWORK_LIBRARY_JSON, 'w') as json_file:
+    json.dump(config, json_file, indent=2)
+shutil.chown(HOMEWORK_LIBRARY_JSON, 'root', DAEMONPHP_GROUP)
+os.chmod(HOMEWORK_LIBRARY_JSON, 0o440)
 
 ##############################################################################
 # Write submitty json
