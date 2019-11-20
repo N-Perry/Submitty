@@ -1,0 +1,95 @@
+        <h1>View All Sources</h1>
+	<label for="homework-name" class="homework-library-search">
+		<div class="option-title">Search</div>
+	</label>
+	<input class="homework-library-search" type="text" name="homework_name"/>
+
+	<div class="homework-library-results">
+		<div class="homework-library-detail">
+			<div class="homework-library-panel-header homework-library-border">
+				Sources
+			</div>
+			<div class="homework-library-panel-container">
+				{% for source in libraries %}
+                    <div class="homework-library-panel-card homework-library-border" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>{{ source }}</span>
+                        <button class="btn" onclick="deleteLibrary('{{ source }}')">Delete</button>
+                    </div>
+                {% endfor %}
+			</div>
+		</div>
+
+        <script type="text/javascript">
+        function deleteLibrary(libraryName) {
+            if (!confirm('Are you sure you want to delete "' + libraryName + '"?')) return;
+            $.ajax({
+                url: '/homework/library/manage/remove/' + libraryName,
+                data: {
+                    csrf_token: '{{ csrf_token }}'
+                },
+                type: 'DELETE',
+                success: function(data) {
+                    try {
+                        var jsondata = JSON.parse(data);
+                        console.log(data);
+                        if (jsondata['status'] === "success") {
+                            displaySubmissionMessage(jsondata);
+                            location.reload(true);
+                        } else {
+                            displaySubmissionMessage(jsondata);
+                        }
+                    }
+                    catch (e) {
+                        displaySubmissionMessage({
+                            status: "fail",
+                            message: "Error parsing response from server."
+                        });
+                    }
+                    submitButton.disabled = false;
+                },
+                error: function(request, status, error) {
+                    displaySubmissionMessage({
+                        status: "fail",
+                        message: request.responseText
+                    });
+                    submitButton.disabled = false;
+                }
+            });
+        }
+        function refreshLibrary(libraryName) {
+            $.ajax({
+                url: '/homework/library/manage/refresh/' + libraryName,
+                data: {
+                    csrf_token: '{{ csrf_token }}'
+                },
+                type: 'GET',
+                success: function(data) {
+                    try {
+                        var jsondata = JSON.parse(data);
+                        if (jsondata['status'] === "success") {
+                            displaySubmissionMessage(jsondata);
+                            location.reload(true);
+                        } else {
+                            displaySubmissionMessage(jsondata);
+                        }
+                    }
+                    catch (e) {
+                        displaySubmissionMessage({
+                            status: "fail",
+                            message: "Error parsing response from server."
+                        });
+                        console.log(data);
+                    }
+                    submitButton.disabled = false;
+                },
+                error: function(request, status, error) {
+                    displaySubmissionMessage({
+                        status: "fail",
+                        message: request.responseText
+                    });
+                    submitButton.disabled = false;
+                }
+            });
+        }
+</script>
+	</div>

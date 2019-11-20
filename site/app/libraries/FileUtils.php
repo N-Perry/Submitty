@@ -103,6 +103,20 @@ class FileUtils {
     }
 
     /**
+     * Deletes the specified file.
+     * Returns true if successful, false otherwise.
+     *
+     * @param string $file
+     * @return bool
+     */
+    public static function rmFile(string $file): bool {
+        if (file_exists($file)) {
+            return unlink($file);
+        }
+        return true;
+    }
+
+    /**
      * Copies all image files from a source folder ($src) and each of its
      * subfolders to a flattened destination folder ($dst), making all
      * filenames lowercase, ignoring subfolders that match our IGNORE_FOLDERS

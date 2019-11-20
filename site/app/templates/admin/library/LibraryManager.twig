@@ -14,6 +14,7 @@
         <a class="nav-bar normal-btn active-btn" id="page_0_nav" href="javascript:onChangeNavTab(0);">Upload</a>
         <a class="nav-bar normal-btn" id="page_1_nav" href="javascript:onChangeNavTab(1);">File Path</a>
         <a class="nav-bar normal-btn" id="page_2_nav" href="javascript:onChangeNavTab(2);">Git</a>
+        <a class="nav-bar normal-btn" id="page_3_nav" href="javascript:onChangeNavTab(3);">View All</a>
     </div>
     <br/>
     <br/>
@@ -21,19 +22,20 @@
         <div class="page-content" id="page_0_content">{{ include('admin/library/LibraryUpload.twig') }}</div>
         <div class="page-content" id="page_1_content" style="display: none;"> {{ include('admin/library/LibraryFilePath.twig') }}</div>
         <div class="page-content" id="page_2_content" style="display: none;"> {{ include('admin/library/LibraryGit.twig') }}</div>
+        <div class="page-content" id="page_3_content" style="display: none;"> {{ include('admin/library/LibraryViewAll.twig') }}</div>
     </div>
 </div>
 
 <script type="text/javascript">
     function onChangeNavTab(tab) {
-        if (tab > 2 || tab < 0) {
+        if (tab > 3 || tab < 0) {
             alert('Invalid Navigation');
             return;
         }
 
         $('.page-content').hide();
         $('#page_' + tab + '_content').show();
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < 4; i++)
         {
             $('#page_' + i + '_nav').removeClass('active-btn');
         }

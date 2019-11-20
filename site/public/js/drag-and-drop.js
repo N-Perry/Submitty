@@ -1052,67 +1052,91 @@ function handleUploadCourseMaterials(csrf_token, expand_zip, cmPath, requested_p
     });
 }
 
-function handleUploadGradeablesZip() {
-  var submit_url = buildCourseUrl(['homework/library', 'zip', 'upload']);
-  var return_url = buildCourseUrl(['homework/library']);
-  var formData = new FormData();
+/**
+ * @param csrf_token
+ * @param submit_url
+ * @return promise resolve on success, reject otherwise with success/failure message string
+ */
+function uploadLibraryZip(csrf_token, submit_url) {
+  return new Promise(function (resolve, reject) {
+    var formData = new FormData();
+    formData.append('csrf_token', csrf_token);
 
-  var filesToBeAdded = false;
-  // Files selected
-  for (var i = 0; i < file_array.length; i++) {
-    for (var j = 0; j < file_array[i].length; j++) {
-      if (file_array[i][j].name.indexOf("'") != -1 ||
-        file_array[i][j].name.indexOf("\"") != -1) {
-        alert("ERROR! You may not use quotes in your filename: " + file_array[i][j].name);
-        return;
-      }
-      else if (file_array[i][j].name.indexOf("\\") != -1 ||
-        file_array[i][j].name.indexOf("/") != -1) {
-        alert("ERROR! You may not use a slash in your filename: " + file_array[i][j].name);
-        return;
-      }
-      else if (file_array[i][j].name.indexOf("<") != -1 ||
-        file_array[i][j].name.indexOf(">") != -1) {
-        alert("ERROR! You may not use angle brackets in your filename: " + file_array[i][j].name);
-        return;
-      }
-      else if (getFileExtension(file_array[i][j].name).toLowerCase() != "zip") {
-        alert("ERROR! Only zip files are supported: " + file_array[i][j].name);
-        return;
-      }
-      formData.append('files' + (i + 1) + '[]', file_array[i][j], file_array[i][j].name);
-      filesToBeAdded = true;
-    }
-  }
-  if (filesToBeAdded == false){
-    return;
-  }
+    var filesToBeAdded = false;
+    // Files selected
+    for (var i = 0; i < file_array.length; i++) {
+      for (var j = 0; j < file_array[i].length; j++) {
+        if (file_array[i][j].name.indexOf("'") != -1 ||
+          file_array[i][j].name.indexOf("\"") != -1) {
+          reject("You may not use quotes in your filename: " + file_array[i][j].name);
+          return;
+        }
+        else if (file_array[i][j].name.indexOf("\\") != -1 ||
+          file_array[i][j].name.indexOf("/") != -1) {
+          reject("You may not use a slash in your filename: " + file_array[i][j].name);
+          return;
+        }
+        else if (file_array[i][j].name.indexOf("<") != -1 ||
+          file_array[i][j].name.indexOf(">") != -1) {
+          reject("You may not use angle brackets in your filename: " + file_array[i][j].name);
+          return;
+        }
+        else if (getFileExtension(file_array[i][j].name).toLowerCase() != "zip") {
+          reject("Only zip files are supported: " + file_array[i][j].name);
+          return;
+        }
 
-  $.ajax({
-    url: submit_url,
-    data: formData,
-    processData: false,
-    contentType: false,
-    type: 'POST',
-    success: function(data) {
-      try {
-        var jsondata = JSON.parse(data);
-
-        if (jsondata['status'] === 'success') {
-          window.location.href = return_url;
+        // single zip file
+        if (filesToBeAdded === false) {
+          formData.append('zip', file_array[i][j], file_array[i][j].name);
+          filesToBeAdded = true;
         }
         else {
-          alert(jsondata['message']);
+          reject("Only one zip file allowed at a time.");
+          break;
         }
+        /*
+        // multiple zip files
+        formData.append('files' + (i + 1) + '[]', file_array[i][j], file_array[i][j].name);
+        filesToBeAdded = true;
+         */
       }
-      catch (e) {
-        alert("Error parsing response from server. Please copy the contents of your Javascript Console and " +
-          "send it to an administrator, as well as what you were doing and what files you were uploading. - [handleUploadGradeablesZip]");
-        console.log(data);
-      }
-    },
-    error: function(data) {
-      window.location.href = buildCourseUrl(['homework/library', 'manage']);
     }
+    if (filesToBeAdded == false){
+      reject("No files selected.");
+    }
+
+    $.ajax({
+      url: submit_url,
+      data: formData,
+      processData: false,
+      contentType: false,
+      type: 'POST',
+      success: function(data) {
+        try {
+          var jsondata = JSON.parse(data);
+
+          if (jsondata['status'] === 'success') {
+            resolve(jsondata);
+          }
+          else {
+            reject(jsondata);
+          }
+        }
+        catch (e) {
+          var data =
+          reject({
+            status: "fail",
+            message: "Error parsing response from server."
+          });
+        }
+      },
+      error: function(request, status, error) {
+        reject({
+          status: "fail",
+          message: request.responseText
+        });
+      }
+    });
   });
 }

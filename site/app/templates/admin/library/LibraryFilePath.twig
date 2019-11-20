@@ -1,4 +1,4 @@
-<form class="form-signin" action="{{ filepath_submit_url }}" method="post">
+<form class="form-signin" action="javascript:void(0);" id="libraryFilepathForm">
     <div class="option row">
         <div class="option-desc col-md-6">
             <label for="instructions_url">
@@ -14,3 +14,47 @@
         <input class="btn btn-primary" type="submit" value="Submit" />
     </div>
 </form>
+<script type="text/javascript">
+    $(function() {
+        $("#libraryFilepathForm").submit(function(e){
+            e.preventDefault();
+            var form = e.target;
+            var submitButton = form.querySelector("input[type='submit']");
+            submitButton.disabled = true;
+            $.ajax({
+                url: '{{ filepath_submit_url }}',
+                data: {
+                    csrf_token: '{{ csrf_token }}',
+                    filepath: form.filepath.value
+                },
+                type: 'POST',
+                success: function(data) {
+                    try {
+                        var jsondata = JSON.parse(data);
+                        if (jsondata['status'] == "success") {
+                            displaySubmissionMessage(jsondata);
+                            location.reload(true);
+                        } else {
+                            displaySubmissionMessage(jsondata);
+                        }
+                    }
+                    catch (e) {
+                        displaySubmissionMessage({
+                            status: "fail",
+                            message: "Error parsing response from server."
+                        });
+                        console.log(data);
+                    }
+                    submitButton.disabled = false;
+                },
+                error: function(request, status, error) {
+                    displaySubmissionMessage({
+                        status: "fail",
+                        message: request.responseText
+                    });
+                    submitButton.disabled = false;
+                }
+            });
+        });
+    });
+</script>

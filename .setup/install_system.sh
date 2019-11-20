@@ -495,8 +495,9 @@ EOF
     # being that we do not disable phpinfo() on the vagrant machine as it's not a function that could be used for
     # development of some feature, but it is useful for seeing information that could help debug something going wrong
     # with our version of PHP.
-    DISABLED_FUNCTIONS="popen,pclose,proc_open,chmod,php_real_logo_guid,php_egg_logo_guid,php_ini_scanned_files,"
-    DISABLED_FUNCTIONS+="php_ini_loaded_file,readlink,symlink,link,set_file_buffer,proc_close,proc_terminate,"
+    # Enabled proc_open and proc_close as they are needed to clone a git repository.
+    DISABLED_FUNCTIONS="popen,pclose,chmod,php_real_logo_guid,php_egg_logo_guid,php_ini_scanned_files,"
+    DISABLED_FUNCTIONS+="php_ini_loaded_file,readlink,symlink,link,set_file_buffer,proc_terminate,"
     DISABLED_FUNCTIONS+="proc_get_status,proc_nice,getmyuid,getmygid,getmyinode,putenv,get_current_user,"
     DISABLED_FUNCTIONS+="magic_quotes_runtime,set_magic_quotes_runtime,import_request_variables,ini_alter,"
     DISABLED_FUNCTIONS+="stream_socket_client,stream_socket_server,stream_socket_accept,stream_socket_pair,"

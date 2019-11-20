@@ -63,6 +63,14 @@ class BaseUnitTest extends \PHPUnit\Framework\TestCase {
             $config->method('getCoursePath')->willReturn($config_values['course_path']);
         }
 
+        if (isset($config_values['homework_library_enable'])) {
+            $config->method('useHomeworkLibrary')->willReturn($config_values['homework_library_enable']);
+        }
+
+        if (isset($config_values['homework_library_location'])) {
+            $config->method('getHomeworkLibraryLocation')->willReturn($config_values['homework_library_location']);
+        }
+
         $config->method('getTimezone')->willReturn(new \DateTimeZone("America/New_York"));
 
         if (isset($config_values['use_mock_time']) && $config_values['use_mock_time'] === true ){
