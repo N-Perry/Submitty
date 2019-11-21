@@ -467,7 +467,7 @@ if not args.worker:
 # Write homework library json
 
 config = OrderedDict()
-config['homework_library_enabled'] = False
+config['homework_library_enabled'] = True
 config['homework_library_location'] = os.path.join(SUBMITTY_INSTALL_DIR, 'library')
 with open(HOMEWORK_LIBRARY_JSON, 'w') as json_file:
     json.dump(config, json_file, indent=2)

@@ -20,12 +20,14 @@ use Symfony\Component\Routing\Annotation\Route;
  * @AccessControl(role="INSTRUCTOR")
  */
 class AdminGradeableController extends AbstractController {
+
     /**
      * @Route("/{_semester}/{_course}/gradeable/{gradeable_id}/homework_library", methods={"GET"})
      */
-    public function selectFromHomeworkLibrary($gradeable_id, $semester, $course) {
+    public function selectFromHomeworkLibrary($gradeable_id) {
         $this->core->getOutput()->renderTwigOutput('admin/admin_gradeable/AdminGradeableHomeworkLibrary.twig', []);
     }
+
     /**
      * @Route("/{_semester}/{_course}/gradeable/{gradeable_id}/update", methods={"GET"})
      */
